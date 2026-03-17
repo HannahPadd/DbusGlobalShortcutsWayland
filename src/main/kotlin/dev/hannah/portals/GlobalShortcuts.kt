@@ -1,5 +1,4 @@
-package org.freedesktop.portal
-
+package dev.hannah.portals
 import org.freedesktop.dbus.DBusPath
 import org.freedesktop.dbus.Struct
 import org.freedesktop.dbus.annotations.DBusInterfaceName

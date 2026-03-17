@@ -1,16 +1,15 @@
-import org.example.GlobalShortcutsHandler
-import org.freedesktop.dbus.DBusPath
-import org.freedesktop.dbus.connections.impl.DBusConnectionBuilder
+import dev.hannah.portals.GlobalShortcutsHandler
+import dev.hannah.portals.ShortcutTuple
 import org.freedesktop.dbus.types.Variant
-import org.freedesktop.portal.GlobalShortcuts
-import org.freedesktop.portal.ShortcutTuple
 
 fun main() {
-    val appId = "dev.slimevr.SlimeVR"
+    val appId = "MyAppID${System.currentTimeMillis()}"
     val globalShortcutsHandler = GlobalShortcutsHandler(appId)
 
-    val shortcut = mutableListOf<ShortcutTuple>(ShortcutTuple("Yaw_Reset", mapOf("description" to Variant("Yaw Reset"))))
+    val shortcut = mutableListOf(ShortcutTuple("Full_Reset", mapOf("description" to Variant("Yaw Reset"))))
 
     globalShortcutsHandler.createSession()
     globalShortcutsHandler.bindShortcut(shortcut)
+    Thread.sleep(20000)
+    globalShortcutsHandler.close()
 }
