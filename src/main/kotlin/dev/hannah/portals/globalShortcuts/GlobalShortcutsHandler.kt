@@ -12,6 +12,7 @@ class GlobalShortcutsHandler(
     val options: MutableMap<String, Variant<*>>,
     val shortcutsList: MutableList<ShortcutTuple>,
     val connection: DBusConnection,
+    var onShortcutActivated: ((String) -> Unit)? = null
 ) {
     private val expectedRequestPath: String
     private var sessionHandle: DBusPath? = null
@@ -45,7 +46,7 @@ class GlobalShortcutsHandler(
 
     private val shortcutsActivatedHandler = DBusSigHandler<GlobalShortcuts.Activated> { response ->
         if (response.sessionHandle == sessionHandle) {
-            println("Shortcut pressed: ${response.shortcutId}")
+            onShortcutActivated?.invoke(response.shortcutId)
         }
     }
 
