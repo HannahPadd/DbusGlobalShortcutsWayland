@@ -12,7 +12,8 @@ class GlobalShortcutsHandler(
     val options: MutableMap<String, Variant<*>>,
     val shortcutsList: MutableList<ShortcutTuple>,
     val connection: DBusConnection,
-    var onShortcutActivated: ((String) -> Unit)? = null
+    var onShortcutActivated: ((String) -> Unit)? = null,
+    var onShortcutsChanged: ((List<ShortcutTuple>) -> Unit)? = null
 ) {
     private val expectedRequestPath: String
     private var sessionHandle: DBusPath? = null
@@ -50,6 +51,12 @@ class GlobalShortcutsHandler(
         }
     }
 
+    private val shortcutsChangedHandler = DBusSigHandler<GlobalShortcuts.ShortcutsChanged> { response ->
+        if (response.sessionHandle == sessionHandle) {
+            onShortcutsChanged?.invoke(response.shortcuts)
+        }
+    }
+
     init {
         val sender = connection.uniqueName.replaceFirst(":", "").replace(".", "_")
         val handleToken = "req_${UUID.randomUUID().toString().replace("-", "")}"
@@ -60,6 +67,7 @@ class GlobalShortcutsHandler(
         expectedRequestPath = "/org/freedesktop/portal/desktop/request/$sender/$handleToken"
         connection.addSigHandler(Request.Response::class.java, globalShortcutsResponseHandler)
         connection.addSigHandler(GlobalShortcuts.Activated::class.java, shortcutsActivatedHandler)
+        connection.addSigHandler(GlobalShortcuts.ShortcutsChanged::class.java, shortcutsChangedHandler)
     }
 
     fun createSession() {

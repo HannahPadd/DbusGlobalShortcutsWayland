@@ -7,7 +7,6 @@ import org.freedesktop.dbus.messages.DBusSignal
 import org.freedesktop.dbus.types.UInt64
 import org.freedesktop.dbus.types.Variant
 import org.freedesktop.dbus.annotations.Position
-import org.freedesktop.dbus.exceptions.DBusException
 
 @DBusInterfaceName("org.freedesktop.portal.GlobalShortcuts")
 interface GlobalShortcuts : DBusInterface {
@@ -62,7 +61,7 @@ interface GlobalShortcuts : DBusInterface {
         }
     }
 
-    class ShortcutsChanged @Throws(DBusException::class) constructor(
+    class ShortcutsChanged(
         path: String,
         val sessionHandle: DBusPath,
         val shortcuts: List<ShortcutTuple>

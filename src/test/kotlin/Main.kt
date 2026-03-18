@@ -5,6 +5,13 @@ import kotlin.test.Test
 
 const val APP_ID = "dev.hannah.portals"
 
+/*
+Options for shortcut include
+"description"
+"preferred_trigger"
+"trigger_description"
+ */
+
 
 fun main() {
     LibraryTest().testCreateShortcut()
@@ -17,11 +24,11 @@ class LibraryTest {
         var isRunning = true
         val portalManager = PortalManager(APP_ID)
         val shortcutsList = mutableListOf(
-            ShortcutTuple("FULL_RESET", mapOf("description" to Variant("Full Reset"), "trigger_description" to Variant("CTRL+ALT+SHIFT+Y"))),
-            ShortcutTuple("YAW_RESET", mapOf("description" to Variant("Yaw Reset"), "trigger_description" to Variant("CTRL+ALT+SHIFT+U"))),
-            ShortcutTuple("MOUNTING_RESET", mapOf("description" to Variant("Mounting Reset"), "trigger_description" to Variant("CTRL+ALT+SHIFT+I"))),
-            ShortcutTuple("FEET_MOUNTING_RESET", mapOf("description" to Variant("Feet Mounting Reset"), "trigger_description" to Variant("CTRL+ALT+SHIFT+P"))),
-            ShortcutTuple("PAUSE_TRACKING", mapOf("description" to Variant("Pause Tracking"), "trigger_description" to Variant("CTRL+ALT+SHIFT+O"))))
+            ShortcutTuple("FULL_RESET", mapOf("description" to Variant("Full Reset"), "preferred_trigger" to Variant("CTRL+ALT+SHIFT+Y"))),
+            ShortcutTuple("YAW_RESET", mapOf("description" to Variant("Yaw Reset"), "preferred_trigger" to Variant("CTRL+ALT+SHIFT+U"))),
+            ShortcutTuple("MOUNTING_RESET", mapOf("description" to Variant("Mounting Reset"), "preferred_trigger" to Variant("CTRL+ALT+SHIFT+I"))),
+            ShortcutTuple("FEET_MOUNTING_RESET", mapOf("description" to Variant("Feet Mounting Reset"), "preferred_trigger" to Variant("CTRL+ALT+SHIFT+P"))),
+            ShortcutTuple("PAUSE_TRACKING", mapOf("description" to Variant("Pause Tracking"), "preferred_trigger" to Variant("CTRL+ALT+SHIFT+O"))))
         val globalShortcutsHandler = portalManager.globalShortcutsRequest(shortcutsList)
         Runtime.getRuntime().addShutdownHook(Thread {
             println("Closing connection")
@@ -49,6 +56,12 @@ class LibraryTest {
                     }
                 }
             }
+
+             globalShortcutsHandler.onShortcutsChanged = { shortcuts ->
+                 for (shortcut in shortcuts) {
+                     println("${shortcut.id} ${shortcut.options.values.first()} ${shortcut.options.values.last()}")
+                 }
+             }
         }
     }
 }
