@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "2.2.21"
+    `java-library`
     `maven-publish`
 }
 
@@ -16,12 +17,13 @@ repositories {
 val dbusTools: Configuration by configurations.creating
 
 dependencies {
+    testImplementation(kotlin("test"))
     implementation("org.slf4j:slf4j-api:1.7.36")
+
     api("com.github.hypfvieh:dbus-java-core:5.2.0")
     api("com.github.hypfvieh:dbus-java-transport-jnr-unixsocket:5.2.0")
     dbusTools("com.github.hypfvieh:dbus-java-utils:5.2.0")
 
-    testImplementation(kotlin("test"))
 }
 
 kotlin {
@@ -47,9 +49,6 @@ tasks.test {
 
 gradle.taskGraph.whenReady {
     tasks.named<Test>("test") {
-        onlyIf {
-            this@whenReady.hasTask(":test") && !this@whenReady.hasTask(":build") && !this@whenReady.hasTask(":assemble")
-        }
         useJUnitPlatform()
     }
 }

@@ -13,13 +13,9 @@ Options for shortcut include
  */
 
 
-fun main() {
-    LibraryTest().testCreateShortcut()
-}
-
 class LibraryTest {
 
-    @Test()
+    @Test
     fun testCreateShortcut() {
         var isRunning = true
         val portalManager = PortalManager(APP_ID)
