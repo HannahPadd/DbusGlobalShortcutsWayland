@@ -66,7 +66,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "dev.hannahpadd"
-            artifactId = "dbusglobalshortcutskotlin"
+            artifactId = "dbusglobalshortcutswayland"
             version = "0.1.0"
 
             from(components["java"])
